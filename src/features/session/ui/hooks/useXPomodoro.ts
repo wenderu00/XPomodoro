@@ -1,0 +1,101 @@
+import { useState, useEffect, useCallback } from 'react';
+import { LocalStorageSessionRepository } from '../../adapters/repositories/LocalStorageSessionRepository';
+import { SessionUseCases } from '../../usecases/SessionUseCases';
+import { SubmitFinalSummaryUseCase } from '../../usecases/SubmitFinalSummaryUseCase';
+import { XPomodoroSession, ProductivityFeeling } from '../../domain/entities/XPomodoro';
+
+const repository = new LocalStorageSessionRepository();
+const sessionUseCases = new SessionUseCases(repository);
+const submitSummaryUseCase = new SubmitFinalSummaryUseCase(repository);
+
+const TIMES = {
+  working: 25 * 60,
+  short_break: 5 * 60,
+  long_break: 30 * 60,
+};
+
+export function useXPomodoro() {
+  const [session, setSession] = useState<XPomodoroSession | null>(null);
+  const [totalXP, setTotalXP] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  const refreshState = useCallback(async () => {
+    const { session: currentSession, stats } = await sessionUseCases.getSession();
+    setSession(currentSession);
+    setTotalXP(stats.totalXP);
+    return currentSession;
+  }, []);
+
+  useEffect(() => {
+    refreshState();
+  }, [refreshState]);
+
+  useEffect(() => {
+    if (!session) return;
+    let timer: number;
+    
+    if (['working', 'short_break', 'long_break'].includes(session.status) && timeLeft > 0) {
+      timer = window.setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            handlePhaseComplete(session.status);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    
+    return () => clearInterval(timer);
+  }, [session?.status, timeLeft]);
+
+  const handlePhaseComplete = async (status: string) => {
+    if (status === 'working') {
+      const updated = await sessionUseCases.completeWork();
+      setSession(updated);
+      if (updated.status === 'long_break') setTimeLeft(TIMES.long_break);
+    } else if (status === 'short_break' || status === 'long_break') {
+      const updated = await sessionUseCases.completeBreak();
+      setSession(updated);
+    }
+  };
+
+  const startWork = async () => {
+    const updated = await sessionUseCases.startWork();
+    setSession(updated);
+    setTimeLeft(TIMES.working);
+  };
+
+  const submitFeedback = async (feeling: ProductivityFeeling) => {
+    const updated = await sessionUseCases.submitFeedback(feeling);
+    setSession(updated);
+    setTimeLeft(updated.status === 'long_break' ? TIMES.long_break : TIMES.short_break);
+  };
+
+  const submitSummary = async (text: string) => {
+    const result = await submitSummaryUseCase.execute(text);
+    const updated = await refreshState();
+    setSession(updated);
+    return result;
+  };
+
+  const restartSession = async () => {
+    const updated = await sessionUseCases.resetSession();
+    setSession(updated);
+    setTimeLeft(0);
+  };
+
+  const devSkipPhase = () => setTimeLeft(1);
+
+  return {
+    session,
+    totalXP,
+    timeLeft,
+    startWork,
+    submitFeedback,
+    submitSummary,
+    restartSession,
+    devSkipPhase
+  };
+}

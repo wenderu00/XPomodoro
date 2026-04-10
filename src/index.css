@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-zinc-950 text-zinc-100 selection:bg-scarlet-500 selection:text-white antialiased;
+  }
+}
+
+/* Força o componente de Loading do react-joyride a seguir o tema Scarlet ao invés do default preto */
+.react-joyride__loader {
+  border-color: rgba(255, 36, 36, 0.3) !important;
+  border-left-color: #ff2424 !important;
+  color: #ff2424 !important;
+}
