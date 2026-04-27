@@ -1,5 +1,6 @@
 import { ISessionRepository } from '../../domain/repositories/ISessionRepository';
-import { XPomodoroSession, UserStats } from '../../domain/entities/XPomodoro';
+import { XPomodoroSession } from '../../domain/entities/XPomodoroSession';
+import { UserStats } from '../../domain/value-objects/UserStats';
 
 const SESSION_KEY = '@xpomodoro:active_session';
 const STATS_KEY = '@xpomodoro:user_stats';

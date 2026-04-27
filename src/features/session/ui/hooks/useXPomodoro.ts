@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { LocalStorageSessionRepository } from '../../adapters/repositories/LocalStorageSessionRepository';
-import { SessionUseCases } from '../../usecases/SessionUseCases';
-import { SubmitFinalSummaryUseCase } from '../../usecases/SubmitFinalSummaryUseCase';
-import { XPomodoroSession, ProductivityFeeling } from '../../domain/entities/XPomodoro';
-
-const repository = new LocalStorageSessionRepository();
-const sessionUseCases = new SessionUseCases(repository);
-const submitSummaryUseCase = new SubmitFinalSummaryUseCase(repository);
+import { XPomodoroSession } from '../../domain/entities/XPomodoroSession';
+import { ProductivityFeeling } from '../../domain/types/ProductivityFeeling';
+import { useSessionDependencies } from '../context/SessionDependencyContext';
 
 const TIMES = {
   working: 25 * 60,
@@ -15,16 +10,26 @@ const TIMES = {
 };
 
 export function useXPomodoro() {
+  const { 
+    getSessionUseCase, 
+    startWorkUseCase, 
+    completeWorkUseCase, 
+    submitFeedbackUseCase, 
+    completeBreakUseCase, 
+    resetSessionUseCase, 
+    submitSummaryUseCase 
+  } = useSessionDependencies();
+  
   const [session, setSession] = useState<XPomodoroSession | null>(null);
   const [totalXP, setTotalXP] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
 
   const refreshState = useCallback(async () => {
-    const { session: currentSession, stats } = await sessionUseCases.getSession();
+    const { session: currentSession, stats } = await getSessionUseCase.execute();
     setSession(currentSession);
     setTotalXP(stats.totalXP);
     return currentSession;
-  }, []);
+  }, [getSessionUseCase]);
 
   useEffect(() => {
     refreshState();
@@ -52,23 +57,23 @@ export function useXPomodoro() {
 
   const handlePhaseComplete = async (status: string) => {
     if (status === 'working') {
-      const updated = await sessionUseCases.completeWork();
+      const updated = await completeWorkUseCase.execute();
       setSession(updated);
       if (updated.status === 'long_break') setTimeLeft(TIMES.long_break);
     } else if (status === 'short_break' || status === 'long_break') {
-      const updated = await sessionUseCases.completeBreak();
+      const updated = await completeBreakUseCase.execute();
       setSession(updated);
     }
   };
 
   const startWork = async () => {
-    const updated = await sessionUseCases.startWork();
+    const updated = await startWorkUseCase.execute();
     setSession(updated);
     setTimeLeft(TIMES.working);
   };
 
   const submitFeedback = async (feeling: ProductivityFeeling) => {
-    const updated = await sessionUseCases.submitFeedback(feeling);
+    const updated = await submitFeedbackUseCase.execute(feeling);
     setSession(updated);
     setTimeLeft(updated.status === 'long_break' ? TIMES.long_break : TIMES.short_break);
   };
@@ -81,7 +86,7 @@ export function useXPomodoro() {
   };
 
   const restartSession = async () => {
-    const updated = await sessionUseCases.resetSession();
+    const updated = await resetSessionUseCase.execute();
     setSession(updated);
     setTimeLeft(0);
   };

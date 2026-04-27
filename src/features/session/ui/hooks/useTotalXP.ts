@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react';
-import { LocalStorageSessionRepository } from '../../adapters/repositories/LocalStorageSessionRepository';
+import { useState, useEffect, useCallback } from 'react';
+import { useSessionDependencies } from '../context/SessionDependencyContext';
 
 export const useTotalXP = () => {
+  const { getTotalXPUseCase } = useSessionDependencies();
   const [totalXP, setTotalXP] = useState(0);
 
-  useEffect(() => {
-    const fetchXP = async () => {
-      const repo = new LocalStorageSessionRepository();
-      const stats = await repo.getUserStats();
-      setTotalXP(stats.totalXP);
-    };
+  const fetchXP = useCallback(async () => {
+    const xp = await getTotalXPUseCase.execute();
+    setTotalXP(xp);
+  }, [getTotalXPUseCase]);
 
+  useEffect(() => {
     fetchXP();
 
     const listener = () => fetchXP();
     window.addEventListener('xpomodoro:xp-updated', listener);
     return () => window.removeEventListener('xpomodoro:xp-updated', listener);
-  }, []);
+  }, [fetchXP]);
 
   return totalXP;
 };

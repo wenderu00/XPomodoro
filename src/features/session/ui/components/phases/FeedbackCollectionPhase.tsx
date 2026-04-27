@@ -1,5 +1,6 @@
 import { Shield } from 'lucide-react';
-import { ProductivityFeeling } from '../../../domain/entities/XPomodoro';
+import { useState } from 'react';
+import { ProductivityFeeling } from '../../../domain/types/ProductivityFeeling';
 
 export const FeedbackCollectionPhase = ({ onSubmit }: { onSubmit: (f: ProductivityFeeling) => void }) => (
   <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-4">
