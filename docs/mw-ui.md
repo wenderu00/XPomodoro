@@ -6,7 +6,8 @@ A UI usa o design system [@mw/ui](https://wenderu00.github.io/mwds/), instalado 
 
 | Elemento do XPomodoro | Como é feito com o @mw/ui |
 |---|---|
-| Cabeçalho com marca, abas e XP | `Navbar` (aba atual com `aria-current`) e `Badge` accent com o troféu |
+| Cabeçalho com marca, abas e XP | `Navbar` com `collapseBelow="lg"` (aba atual com `aria-current`) e `Badge` accent com o troféu |
+| Controle de tema | `ThemeToggle` (sistema, escuro, claro) no cabeçalho a partir de lg e no menu abaixo disso, com o `ThemeScript` no `<head>` para não piscar |
 | Painel da sessão | `Card` |
 | Progresso dos 4 ciclos | `Progress` `size="sm"` com o rótulo "Ciclo N de 4" |
 | Iniciar ciclo, descartar sessão, pular cronômetro | `Button` primário e `ghost` |
