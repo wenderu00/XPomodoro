@@ -1,6 +1,6 @@
 # XPomodoro
 
-[![CI](https://github.com/wenderu00/XPomodoro/actions/workflows/ci.yml/badge.svg)](https://github.com/wenderu00/XPomodoro/actions/workflows/ci.yml)
+[![GitHub Pages](https://github.com/wenderu00/XPomodoro/actions/workflows/pages.yml/badge.svg)](https://github.com/wenderu00/XPomodoro/actions/workflows/pages.yml)
 [![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
@@ -60,8 +60,11 @@ npm test           # testes da UI com vitest
 npm run lint
 npm run typecheck
 npm run build      # site estático em out/, servido em /XPomodoro
-npm run deploy     # publica out/ no GitHub Pages
 ```
+
+Cada push no `main` roda lint, typecheck, testes e build e publica no GitHub Pages
+pelo workflow [`pages.yml`](.github/workflows/pages.yml). Nos PRs, o mesmo workflow
+só valida.
 
 ## Stack
 

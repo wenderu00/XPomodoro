@@ -8,9 +8,7 @@
     "build": "next build",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out --nojekyll"
+    "test": "vitest run"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -33,7 +31,6 @@
     "@vitejs/plugin-react": "^6.1.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
-    "gh-pages": "^6.3.0",
     "jsdom": "^30.1.3",
     "tailwindcss": "^4",
     "typescript": "^5",
