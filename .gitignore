@@ -3,3 +3,9 @@ node_modules
 .antigravityrc
 .env
 .agents
+
+/.next/
+/out/
+*.tsbuildinfo
+next-env.d.ts
+/coverage

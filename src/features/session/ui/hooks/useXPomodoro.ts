@@ -32,30 +32,13 @@ export function useXPomodoro() {
   }, [getSessionUseCase]);
 
   useEffect(() => {
-    refreshState();
-  }, [refreshState]);
+    getSessionUseCase.execute().then(({ session: currentSession, stats }) => {
+      setSession(currentSession);
+      setTotalXP(stats.totalXP);
+    });
+  }, [getSessionUseCase]);
 
-  useEffect(() => {
-    if (!session) return;
-    let timer: number;
-    
-    if (['working', 'short_break', 'long_break'].includes(session.status) && timeLeft > 0) {
-      timer = window.setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            handlePhaseComplete(session.status);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    
-    return () => clearInterval(timer);
-  }, [session?.status, timeLeft]);
-
-  const handlePhaseComplete = async (status: string) => {
+  const handlePhaseComplete = useCallback(async (status: string) => {
     if (status === 'working') {
       const updated = await completeWorkUseCase.execute();
       setSession(updated);
@@ -64,7 +47,18 @@ export function useXPomodoro() {
       const updated = await completeBreakUseCase.execute();
       setSession(updated);
     }
-  };
+  }, [completeWorkUseCase, completeBreakUseCase]);
+
+  useEffect(() => {
+    if (!session || !['working', 'short_break', 'long_break'].includes(session.status) || timeLeft <= 0) return;
+
+    const timer = window.setTimeout(() => {
+      if (timeLeft === 1) handlePhaseComplete(session.status);
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [session, timeLeft, handlePhaseComplete]);
 
   const startWork = async () => {
     const updated = await startWorkUseCase.execute();
