@@ -5,7 +5,7 @@ export const StartCyclePhase = ({ onStart, onRestart }: { onStart: () => void; o
   <div className="flex flex-col items-center gap-6 text-center">
     <Target aria-hidden="true" className="size-12 text-accent-text" />
     <p className="text-ink-soft">Mantenha o foco pelos próximos 25 minutos. Evite distrações a qualquer custo.</p>
-    <Button size="lg" className="w-full" onClick={onStart}>
+    <Button data-tour="start-button" size="lg" className="w-full" onClick={onStart}>
       <Play aria-hidden="true" /> Iniciar ciclo
     </Button>
 

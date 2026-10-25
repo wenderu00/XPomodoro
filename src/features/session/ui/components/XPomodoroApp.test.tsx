@@ -17,13 +17,14 @@ function renderApp() {
 }
 
 async function skipPhase(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole("button", { name: /pular cronômetro/i }));
+  await user.click(await screen.findByRole("button", { name: /pular cronômetro/i }));
   await act(() => vi.advanceTimersByTimeAsync(1000));
 }
 
 describe("XPomodoroApp", () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
+    localStorage.setItem("@xpomodoro:tour_completed", "true");
   });
 
   afterEach(() => {
@@ -44,7 +45,7 @@ describe("XPomodoroApp", () => {
 
     await user.click(await screen.findByRole("button", { name: /iniciar ciclo/i }));
 
-    expect(screen.getByRole("timer")).toHaveTextContent("25:00");
+    expect(await screen.findByRole("timer")).toHaveTextContent("25:00");
     expect(screen.getByText("Foco extremo")).toBeInTheDocument();
   });
 
@@ -54,10 +55,10 @@ describe("XPomodoroApp", () => {
     await user.click(await screen.findByRole("button", { name: /iniciar ciclo/i }));
     await skipPhase(user);
 
-    expect(screen.getByText(/qual foi o seu sentimento de produtividade/i)).toBeInTheDocument();
+    expect(await screen.findByText(/qual foi o seu sentimento de produtividade/i)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /alto/i }));
 
-    expect(screen.getByRole("timer")).toHaveTextContent("05:00");
+    expect(await screen.findByRole("timer")).toHaveTextContent("05:00");
     expect(screen.getByText("Descanso curto")).toBeInTheDocument();
   });
 
@@ -67,7 +68,7 @@ describe("XPomodoroApp", () => {
     for (let cycle = 1; cycle <= 4; cycle++) {
       await user.click(await screen.findByRole("button", { name: /iniciar ciclo/i }));
       await skipPhase(user);
-      await user.click(screen.getByRole("button", { name: /médio/i }));
+      await user.click(await screen.findByRole("button", { name: /médio/i }));
       await skipPhase(user);
     }
 
@@ -88,7 +89,7 @@ describe("XPomodoroApp", () => {
 
     await user.click(await screen.findByRole("button", { name: /iniciar ciclo/i }));
 
-    expect(screen.getByRole("timer")).toBeInTheDocument();
+    expect(await screen.findByRole("timer")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /pular cronômetro/i })).not.toBeInTheDocument();
   });
 
@@ -97,12 +98,12 @@ describe("XPomodoroApp", () => {
 
     await user.click(await screen.findByRole("button", { name: /iniciar ciclo/i }));
     await skipPhase(user);
-    await user.click(screen.getByRole("button", { name: /baixo/i }));
+    await user.click(await screen.findByRole("button", { name: /baixo/i }));
     await skipPhase(user);
 
-    expect(screen.getByText(/ciclo 2 de 4/i)).toBeInTheDocument();
+    expect(await screen.findByText(/ciclo 2 de 4/i)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /descartar sessão atual/i }));
 
-    expect(screen.getByText(/ciclo 1 de 4/i)).toBeInTheDocument();
+    expect(await screen.findByText(/ciclo 1 de 4/i)).toBeInTheDocument();
   });
 });

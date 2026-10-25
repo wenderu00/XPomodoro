@@ -3,10 +3,11 @@ import { Bricolage_Grotesque, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/goo
 import { AppHeader } from '@/features/session/ui/components/AppHeader';
 import { Providers } from './providers';
 import './globals.css';
+import { cn } from "@/lib/utils";
 
-const fontBricolage = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-bricolage', weight: ['500', '700', '800'] });
-const fontPlexSans = IBM_Plex_Sans({ subsets: ['latin'], variable: '--font-plex-sans', weight: ['400', '500', '600'] });
-const fontPlexMono = IBM_Plex_Mono({ subsets: ['latin'], variable: '--font-plex-mono', weight: ['400', '500'] });
+const bricolageGrotesqueBricolage = Bricolage_Grotesque({subsets:['latin'],weight:['500','700','800'],variable:'--font-bricolage'});
+const ibmPlexSansPlexSans = IBM_Plex_Sans({subsets:['latin'],weight:['400','500','600'],variable:'--font-plex-sans'});
+const ibmPlexMonoPlexMono = IBM_Plex_Mono({subsets:['latin'],weight:['400','500'],variable:'--font-plex-mono'});
 
 export const metadata: Metadata = {
   title: 'XPomodoro',
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${fontBricolage.variable} ${fontPlexSans.variable} ${fontPlexMono.variable}`}>
+    <html lang="pt-BR" className={cn(bricolageGrotesqueBricolage.variable, ibmPlexSansPlexSans.variable, ibmPlexMonoPlexMono.variable)}>
       <body>
         <Providers>
           <div className="flex min-h-screen flex-col bg-ground text-ink">

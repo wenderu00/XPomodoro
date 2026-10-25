@@ -69,7 +69,6 @@ React 19 · TypeScript · Next.js 16 · Tailwind CSS 4 · @mw/ui · Vitest · Gi
 
 ## Próximos passos
 
-- Voltar com o tour de onboarding usando o `Tour` do @mw/ui.
 - Testes dos casos de uso e da entidade.
 - Levar as regras de transição (e a dos 4 ciclos) para dentro da entidade.
 - Persistir o cronômetro, para recarregar a página no meio de um ciclo não perder o estado.

@@ -18,25 +18,16 @@ A UI usa o design system [@mw/ui](https://wenderu00.github.io/mwds/), instalado 
 | Manual XP e A filosofia | `PageHeader` + `FeatureGrid` com 3 colunas |
 | Cores scarlet, troféu amarelo e verde de sucesso | accent do DS, `text-accent-text` e `text-success-text` |
 
-## O que falta no @mw/ui para refazer o site inteiro
+## Tour de onboarding
 
-### Tour de onboarding (lacuna total)
+O site original tinha um tour de 6 passos com `react-joyride`, que o DS não cobria. O `Tour` entrou no @mw/ui 0.13.0 e substitui o joyride em `OnboardingTour.tsx`:
 
-O site original tinha um tour de 6 passos com `react-joyride`. O DS não tem equivalente, e o tour ficou de fora até o componente existir. Ele está sendo construído no mwds como `Tour` (0.13.0). O que ele precisa:
+- os alvos são marcados com `data-tour`;
+- o tour abre sozinho na primeira sessão;
+- o botão de ajuda do cabeçalho reabre o tour, voltando antes ao ciclo 1;
+- a chave `@xpomodoro:tour_completed` do `localStorage` é a mesma de antes.
 
-- Passos apontados para um elemento, ou centralizados, com título, texto e posição.
-- Camada escura com recorte (spotlight) em volta do alvo, nos tokens e no raio de card.
-- Balão ancorado com "pular", "voltar", "avançar" ou "entendi" e o contador "2 de 6".
-- Acessibilidade:
-  - diálogo modal rotulado, com o foco preso no balão;
-  - Esc pula o tour;
-  - o foco volta à origem ao fechar;
-  - cada passo novo é anunciado;
-  - o alvo rola até ficar visível;
-  - respeita `prefers-reduced-motion`.
-- API controlada (`open`, `onOpenChange`, `step`, `onStepChange`). Guardar se o tour já foi visto fica com o app.
-
-Quando o `Tour` for publicado, ele entra aqui ligado ao botão de ajuda do cabeçalho, com a mesma chave `@xpomodoro:tour_completed` do `localStorage`.
+## O que ainda falta no @mw/ui
 
 ### Cronômetro (lacuna parcial)
 
@@ -54,3 +45,6 @@ Ele foi montado à mão e funciona. Um componente `Countdown` no DS valeria a pe
 3. **A `Navbar` usa `<a>` simples.** Os links não recebem o `basePath` do Next sozinhos e fazem navegação completa, sem a navegação do lado do cliente. Aqui o `basePath` vai por `NEXT_PUBLIC_BASE_PATH`. Uma prop para trocar o elemento do link (`asChild` ou `linkComponent`) resolveria.
 4. **O padrão do `create-next-app@16.4` não exporta.** `cacheComponents` e `partialPrefetching` vêm ligados e quebram `output: "export"` com `PPR cannot be enabled in export mode`. A página Primeiros passos não cobre site estático.
 5. **O vitest 5 não instala ao lado do `@types/node@^20`** que o create-next-app põe. Foi preciso subir os tipos.
+6. **O `add` reescreve as fontes do `layout.tsx`.** Ao instalar o `tour`, o CLI renomeou as variáveis de fonte e trocou a template string por `cn(...)`. Funciona igual, mas mexe em código do app sem pedir.
+7. **O `Tour` cria um `ResizeObserver` mesmo fechado.** Nos testes com jsdom, que não tem `ResizeObserver`, qualquer tela que monta o `Tour` quebra até haver um polyfill no `vitest.setup.ts`. Em navegador funciona.
+8. **O balão do `Tour` sai cortado em telas muito baixas.** Com 347px de altura, o balão do último passo, posicionado em cima do botão, sai cortado no topo. Com 700px, cabe inteiro.
