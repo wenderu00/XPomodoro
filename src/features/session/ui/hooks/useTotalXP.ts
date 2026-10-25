@@ -11,12 +11,12 @@ export const useTotalXP = () => {
   }, [getTotalXPUseCase]);
 
   useEffect(() => {
-    fetchXP();
+    getTotalXPUseCase.execute().then(setTotalXP);
 
     const listener = () => fetchXP();
     window.addEventListener('xpomodoro:xp-updated', listener);
     return () => window.removeEventListener('xpomodoro:xp-updated', listener);
-  }, [fetchXP]);
+  }, [fetchXP, getTotalXPUseCase]);
 
   return totalXP;
 };

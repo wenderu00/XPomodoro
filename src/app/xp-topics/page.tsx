@@ -2,8 +2,11 @@ import {
   Users, Target, Clock, Laptop2, CheckSquare, 
   RefreshCw, Share2, FileCode2, Feather, 
   Lightbulb, BatteryCharging, GitMerge, Rocket, 
-  LucideIcon 
+  LucideIcon
 } from 'lucide-react';
+import type { Metadata } from 'next';
+import { FeatureGrid } from '@/components/ui/feature-grid';
+import { PageHeader } from '@/components/ui/page-header';
 
 const xpPractices: { title: string, desc: string, Icon: LucideIcon }[] = [
   { title: "Cliente presente", desc: "Comunicação diária e direta no projeto para evitar qualquer desalinhamento de expectativas.", Icon: Users },
@@ -21,31 +24,24 @@ const xpPractices: { title: string, desc: string, Icon: LucideIcon }[] = [
   { title: "Releases curtos", desc: "Entregas validadas e funcionais num estrito curto prazo para o cliente lucrar ou pivotar o quanto antes.", Icon: Rocket }
 ];
 
-export const XPTopicsPage = () => {
-  return (
-    <div className="max-w-6xl mx-auto p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 pb-24 w-full">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-          Práticas do <span className="text-scarlet-500">Extreme Programming</span>
-        </h1>
-        <p className="text-zinc-400 text-lg leading-relaxed max-w-2xl mx-auto">
-          As lendárias práticas da engenharia de software ágil. Princípios absolutos que priorizam a comunicação cristalina, um feedback reacionário e uma excelência inegociável na entrega.
-        </p>
-      </div>
+export const metadata: Metadata = { title: 'Manual XP · XPomodoro' };
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {xpPractices.map((practice, index) => (
-          <div key={index} className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-scarlet-500/50 hover:bg-zinc-900 transition-colors shadow-lg group">
-             <div className="flex items-center gap-3 mb-4">
-               <div className="bg-zinc-950 border border-zinc-800 p-2 rounded-xl">
-                 <practice.Icon className="text-scarlet-500 w-5 h-5 group-hover:scale-110 transition-transform" />
-               </div>
-               <h3 className="text-lg font-bold text-white leading-tight">{practice.title}</h3>
-             </div>
-             <p className="text-zinc-400 text-sm leading-relaxed">{practice.desc}</p>
-          </div>
-        ))}
-      </div>
+export default function XPTopicsPage() {
+  return (
+    <div className="mx-auto flex w-full max-w-content flex-col gap-10 px-6 py-16">
+      <PageHeader
+        kicker="manual xp"
+        title="Práticas do Extreme Programming"
+        description="As lendárias práticas da engenharia de software ágil. Princípios absolutos que priorizam a comunicação cristalina, um feedback reacionário e uma excelência inegociável na entrega."
+      />
+      <FeatureGrid
+        columns={3}
+        items={xpPractices.map((practice) => ({
+          title: practice.title,
+          description: practice.desc,
+          icon: <practice.Icon aria-hidden="true" />,
+        }))}
+      />
     </div>
   );
-};
+}

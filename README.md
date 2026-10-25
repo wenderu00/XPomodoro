@@ -47,20 +47,29 @@ O código de sessão fica em `src/features/session/`, separado em camadas:
 A UI só conversa com os casos de uso, e os casos de uso só conhecem a porta. Trocar o
 `localStorage` por uma API é escrever outro adapter.
 
+As rotas ficam em `src/app/` (Next.js App Router, exportado como site estático), e os
+componentes visuais vêm do design system [@mw/ui](https://wenderu00.github.io/mwds/), em
+`src/components/ui/`. O mapeamento e o que ainda falta no DS estão em [docs/mw-ui.md](docs/mw-ui.md).
+
 ## Rodando localmente
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # typecheck + build de produção
+npm run dev        # http://localhost:3000
+npm test           # testes da UI com vitest
+npm run lint
+npm run typecheck
+npm run build      # site estático em out/, servido em /XPomodoro
+npm run deploy     # publica out/ no GitHub Pages
 ```
 
 ## Stack
 
-React 18 · TypeScript · Vite · Tailwind CSS · React Router · React Joyride (tour de onboarding) · GitHub Pages
+React 19 · TypeScript · Next.js 16 · Tailwind CSS 4 · @mw/ui · Vitest · GitHub Pages
 
 ## Próximos passos
 
+- Voltar com o tour de onboarding usando o `Tour` do @mw/ui.
 - Testes dos casos de uso e da entidade.
 - Levar as regras de transição (e a dos 4 ciclos) para dentro da entidade.
 - Persistir o cronômetro, para recarregar a página no meio de um ciclo não perder o estado.
