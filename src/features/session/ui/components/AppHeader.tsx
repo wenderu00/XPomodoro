@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { IconButton } from '@/components/ui/icon-button';
 import { Navbar } from '@/components/ui/navbar';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useTotalXP } from '../hooks/useTotalXP';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
@@ -23,6 +24,7 @@ export const AppHeader = () => {
 
   return (
     <Navbar
+      collapseBelow="lg"
       brand={
         <a href={`${basePath}/`} data-tour="header" className="flex items-center gap-2 font-display text-lg font-extrabold text-ink no-underline">
           <Brain aria-hidden="true" className="size-6 text-accent-text" />
@@ -30,8 +32,10 @@ export const AppHeader = () => {
         </a>
       }
       links={routes.map((route) => ({ href: `${basePath}${route.path}`, label: route.label, current: pathname === route.path }))}
+      menuFooter={<ThemeToggle className="self-start" />}
       actions={
         <>
+          <ThemeToggle className="hidden lg:inline-flex" />
           <IconButton aria-label="Reiniciar e exibir tutorial" onClick={() => window.dispatchEvent(new Event('xpomodoro:request-tour'))}>
             <HelpCircle aria-hidden="true" />
           </IconButton>

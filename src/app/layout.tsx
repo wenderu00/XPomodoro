@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Bricolage_Grotesque, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
+import { ThemeScript } from '@/components/ui/theme-toggle';
 import { AppHeader } from '@/features/session/ui/components/AppHeader';
 import { Providers } from './providers';
 import './globals.css';
@@ -16,7 +17,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={cn(bricolageGrotesqueBricolage.variable, ibmPlexSansPlexSans.variable, ibmPlexMonoPlexMono.variable)}>
+    <html
+      lang="pt-BR"
+      suppressHydrationWarning
+      className={cn(bricolageGrotesqueBricolage.variable, ibmPlexSansPlexSans.variable, ibmPlexMonoPlexMono.variable)}
+    >
+      <head>
+        <ThemeScript />
+      </head>
       <body>
         <Providers>
           <div className="flex min-h-screen flex-col bg-ground text-ink">
