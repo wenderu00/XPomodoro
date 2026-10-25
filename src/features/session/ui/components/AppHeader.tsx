@@ -27,7 +27,7 @@ export const AppHeader = () => {
       collapseBelow="lg"
       brand={
         <a href={`${basePath}/`} data-tour="header" className="flex items-center gap-2 font-display text-lg font-extrabold text-ink no-underline">
-          <Brain aria-hidden="true" className="size-6 text-accent-text" />
+          <Brain aria-hidden="true" className="size-5 text-accent-text" />
           XPomodoro
         </a>
       }
@@ -40,7 +40,7 @@ export const AppHeader = () => {
             <HelpCircle aria-hidden="true" />
           </IconButton>
           <Badge data-tour="xp-badge" tone="accent" appearance="soft">
-            <Trophy aria-hidden="true" className="size-3.5" />
+            <Trophy aria-hidden="true" />
             {totalXP} XP
           </Badge>
         </>
