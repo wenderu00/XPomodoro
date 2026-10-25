@@ -10,7 +10,7 @@ const options: { feeling: ProductivityFeeling; label: string }[] = [
 
 export const FeedbackCollectionPhase = ({ onSubmit }: { onSubmit: (f: ProductivityFeeling) => void }) => (
   <div className="flex flex-col items-center gap-6 text-center">
-    <Shield aria-hidden="true" className="size-12 text-accent-text" />
+    <Shield aria-hidden="true" className="size-6 text-accent-text" />
     <div className="flex flex-col gap-2">
       <h2 className="font-display text-display-sm font-extrabold text-ink">Ciclo concluído!</h2>
       <p className="text-ink-soft">Qual foi o seu sentimento de produtividade neste ciclo?</p>

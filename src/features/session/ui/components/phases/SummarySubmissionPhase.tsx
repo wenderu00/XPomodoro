@@ -10,7 +10,7 @@ export const SummarySubmissionPhase = ({ onSubmit }: { onSubmit: (t: string) => 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
-        <CheckCircle aria-hidden="true" className="size-12 text-success-text" />
+        <CheckCircle aria-hidden="true" className="size-6 text-success-text" />
         <h2 className="font-display text-display-sm font-extrabold text-ink">Jornada finalizada!</h2>
         <p className="text-ink-soft">Resuma o que você conquistou nestas últimas horas para garantir sua recompensa em XP.</p>
       </div>
